@@ -1,1 +1,1 @@
-# vectorizeRaster
+# shp2postgis
