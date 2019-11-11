@@ -13,11 +13,11 @@ def vectorize(raster_file, metadata, vector_file, driver, mask_value):
     """Extract vector from raster. Vector propably will include polygons with holes.
     
     Args:
-    raster_file: raster image as ndarray.
-    src: DatasetReader type. Keeps path to filesystem.
-    vector_file: Pathname of output vector file, as string.
-    driver: Kind of vector file format, as string.
-    mask_value: No data value, as float or integer.
+    raster_file (ndarray): raster image.
+    src (DatasetReader type): Keeps path to filesystem.
+    vector_file (string): Pathname of output vector file.
+    driver (string): Kind of vector file format.
+    mask_value (float or integer): No data value.
     
     Returns:
     Returns 0 & saves folder containing vector shapefile to cwd or to given path.
