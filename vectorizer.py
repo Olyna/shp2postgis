@@ -27,10 +27,7 @@ def vectorize(raster_file, metadata, vector_file, driver, mask_value):
     else:
         mask = None
     
-    results = (
-        {'properties': {'raster_val': v}, 'geometry': s}
-        for i, (s, v) 
-        in enumerate(
+    results = ({'properties': {'raster_val': v}, 'geometry': s} for i, (s, v) in enumerate(
             # The shapes iterator yields geometry, value pairs
             shapes(raster_file, mask=mask, transform=metadata['transform'])))
 
