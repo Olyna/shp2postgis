@@ -43,5 +43,5 @@ def vectorize(raster_file, metadata, vector_file, driver, mask_value):
         dst.writerecords(results)
 
     end = time.time()
-    print("Elapsed time to vectorize raster {}:\n{} mins".format(raster_file, (end-start)//60))
+    print("Elapsed time to vectorize raster to shp {}:\n{} mins".format(vector_file, (end-start)//60))
     return 0
