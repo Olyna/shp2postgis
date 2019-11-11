@@ -8,6 +8,7 @@ Created on Mon Oct  7 18:16:12 2019
 import fiona
 import rasterio
 from rasterio.features import shapes
+import time
 
 def vectorize(raster_file, metadata, vector_file, driver, mask_value):
     """Extract vector from raster. Vector propably will include polygons with holes.
@@ -22,6 +23,8 @@ def vectorize(raster_file, metadata, vector_file, driver, mask_value):
     Returns:
     Returns 0 & saves folder containing vector shapefile to cwd or to given path.
     """
+    start = time.time()
+
     if mask_value is not None:
         mask = raster_file == mask_value
     else:
@@ -38,4 +41,7 @@ def vectorize(raster_file, metadata, vector_file, driver, mask_value):
             schema = {'properties': [('raster_val', 'int')],
                     'geometry': 'Polygon'}) as dst:
         dst.writerecords(results)
+
+    end = time.time()
+    print("Elapsed time to vectorize raster {}:\n{} mins".format(raster_file, (end-start)//60))
     return 0

@@ -38,7 +38,6 @@ def createsdb(host, dbname, user, password):
         # Close communication with the database
         cur.close()
         defaultcon.close()
-
     return 0
 
 
@@ -79,7 +78,8 @@ def shp2table(cursor, shpname, tablename):
     """
     srcFile = str(shpname)
     shapefile = osgeo.ogr.Open(srcFile)    
-    layer = shapefile.GetLayer(0)    
+    layer = shapefile.GetLayer(0)
+    print("Insert shapefile. . .{}\nto database. . .{}".format(shpname, tablename))
     for i in range(layer.GetFeatureCount()):  
         feature = layer.GetFeature(i)  
         dn = feature.GetField("raster_val")

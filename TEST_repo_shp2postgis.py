@@ -17,7 +17,7 @@ from osgeo import ogr
 import time
 
 import sys
-sys.path.insert(1, '/home/olyna/Documents/SCRIPTS/Python/mylib/')
+sys.path.insert(1, '/home/olyna/Documents/SCRIPTS/Python/Github/')
 from clipImageByCoordinates import GeoImClip
 from clipImageByCoordinates import quadrants_coords
 from vectorizer import vectorize
