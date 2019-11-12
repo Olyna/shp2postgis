@@ -16,7 +16,7 @@ The functions pred2db allow you to create a new database, or connect to an exist
 minx, maxx, miny, maxy = quadrants_coords(raster_file, quadrant)
 ```
 
-Clip selected quadrant of raster file.
+Clip selected quadrant of raster file. \
 Args: \
 raster_file (string): Raster image file fullpath. \
 quadrant: One of the four pieces. Start counting from upper left corner, clockwise. Integer in range [1,4]. \
@@ -29,7 +29,6 @@ wholeImageObject = GeoImClip(searchPath)
 ```
 
 Returns class object.
-
 
 ```
 geometry = wholeImageObject.boundingBox(minx, maxx, miny, maxy, srid)
@@ -45,71 +44,68 @@ geometry: polygon geometry dataframe.
 ```
 out_img, out_meta = wholeImageObject.clip(im, geometry, write=False)
 ```
+
 Clip image & update metadata of output image. Option to write
 output image to disk.
-
 Args:
 im (string): Path to image.
 geometry: Geometry dataframe used as bounding box to clip image.
 write (bool (opt)): Whether to save output raster to disk. Defaults to False. 
-
 Returns:
 out_img: clipped array.
 out_meta: updated metadata for clipped raster.
 
 ### vectorizer
+
 ```
 vectorize(raster_file=out_img, metadata=out_meta, vector_file, driver, mask_value)
 ```
-Extract vector from raster. Vector propably will include polygons with holes.
 
+Extract vector from raster. Vector propably will include polygons with holes.
 Args:
 raster_file (ndarray): raster image.
 src (DatasetReader type): Keeps path to filesystem.
 vector_file (string): Pathname of output vector file.
 driver (string): Kind of vector file format.
 mask_value (float or integer): No data value.
-
 Returns:
 Returns 0 & saves folder containing vector shapefile to cwd or to given path.
 
 ### pred2db
+
 ```
 createsdb(host, dbname, user, password)
 ```
-Create new postgres database.
 
+Create new postgres database.
 Args:
 host: IP or Localhost, as string.
 dbname: New database name, as string.
 user: Name of existin user, as string.
 password: User password, as string.
-
 Returns:
 Returns 0.
 
 ```
 creategeotable(cursor, tablename)
 ```
-Create new table & postgis extension.
 
+Create new table & postgis extension.
 Args:
 cursor: existing psycopg2 cursor.
 tablename: Name of the new table, as string.
-
 Returns:
 Returns 0.
 
 ```
 shp2table(cursor, shpname, tablename)
 ```
-Shapefile to database table.
 
+Shapefile to database table.
 Args:
 cursor: existing psycopg2 cursor.
 shpname: Path to input shapefile's folder, as string.
 tablename: Name of target table, as string.
-
 Returns:
 Returns 0.
 
