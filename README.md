@@ -10,7 +10,7 @@ The functions pred2db allow you to create a new database, or connect to an exist
 
 
 ## Usage
-# clipImageByCoordinates
+### clipImageByCoordinates
 minx, maxx, miny, maxy = quadrants_coords(raster_file, quadrant)
     Clip selected quadrant of raster file.
 
@@ -49,7 +49,7 @@ out_img, out_meta = wholeImageObject.clip(im, geometry, write=False)
         out_img: clipped array.
         out_meta: updated metadata for clipped raster.
 
-# vectorizer
+### vectorizer
 vectorize(raster_file=out_img, metadata=out_meta, vector_file, driver, mask_value)
     Extract vector from raster. Vector propably will include polygons with holes.
     
@@ -63,7 +63,7 @@ vectorize(raster_file=out_img, metadata=out_meta, vector_file, driver, mask_valu
     Returns:
     Returns 0 & saves folder containing vector shapefile to cwd or to given path.
 
-# pred2db
+### pred2db
 createsdb(host, dbname, user, password)
     Create new postgres database.
 
