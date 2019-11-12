@@ -51,7 +51,7 @@ geometry: Geometry dataframe used as bounding box to clip image. \
 write (bool (opt)): Whether to save output raster to disk. Defaults to False. \
 Returns: \
 out_img: clipped array. \
-out_meta: updated metadata for clipped raster. \
+out_meta: updated metadata for clipped raster.
 
 ### vectorizer
 ```
@@ -66,7 +66,7 @@ vector_file (string): Pathname of output vector file. \
 driver (string): Kind of vector file format. \
 mask_value (float or integer): No data value. \
 Returns: \
-Returns 0 & saves folder containing vector shapefile to cwd or to given path. \
+Returns 0 & saves folder containing vector shapefile to cwd or to given path.
 
 ### pred2db
 ```
@@ -91,7 +91,7 @@ Args: \
 cursor: existing psycopg2 cursor. \
 tablename: Name of the new table, as string. \
 Returns: \
-Returns 0. \
+Returns 0.
 
 ```
 shp2table(cursor, shpname, tablename)
