@@ -10,10 +10,95 @@ The functions pred2db allow you to create a new database, or connect to an exist
 
 
 ## Usage
+# clipImageByCoordinates
+minx, maxx, miny, maxy = quadrants_coords(raster_file, quadrant)
+    Clip selected quadrant of raster file.
+
+    Args:
+    raster_file (string): Raster image file fullpath.
+    quadrant: One of the four pieces. Start counting from upper left corner, clockwise.
+              Integer in range [1,4].
+
+    Returns:
+    Bounding box coordinates of selected quadrant.
+
+
+wholeImageObject = GeoImClip(searchPath)
+    Returns class object.
+
+geometry = wholeImageObject.boundingBox(minx, maxx, miny, maxy, srid)
+        Generates polygon geometry, from given coordinates.
+
+        Args:
+        minx, maxx, miny, maxy : float number.
+        srid (integer): coordinates reference system id.
+
+        Returns:
+        geometry: polygon geometry dataframe.
+
+out_img, out_meta = wholeImageObject.clip(im, geometry, write=False)
+        Clip image & update metadata of output image. Option to write
+        output image to disk.
+
+        Args:
+        im (string): Path to image.
+        geometry: Geometry dataframe used as bounding box to clip image.
+        write (bool (opt)): Whether to save output raster to disk. Defaults to False. 
+
+        Returns:
+        out_img: clipped array.
+        out_meta: updated metadata for clipped raster.
+
+# vectorizer
+vectorize(raster_file=out_img, metadata=out_meta, vector_file, driver, mask_value)
+    Extract vector from raster. Vector propably will include polygons with holes.
+    
+    Args:
+    raster_file (ndarray): raster image.
+    src (DatasetReader type): Keeps path to filesystem.
+    vector_file (string): Pathname of output vector file.
+    driver (string): Kind of vector file format.
+    mask_value (float or integer): No data value.
+    
+    Returns:
+    Returns 0 & saves folder containing vector shapefile to cwd or to given path.
+
+# pred2db
+createsdb(host, dbname, user, password)
+    Create new postgres database.
+
+    Args:
+    host: IP or Localhost, as string.
+    dbname: New database name, as string.
+    user: Name of existin user, as string.
+    password: User password, as string.
+
+    Returns:
+    Returns 0.
+
+creategeotable(cursor, tablename)
+    Create new table & postgis extension.
+
+    Args:
+    cursor: existing psycopg2 cursor.
+    tablename: Name of the new table, as string.
+
+    Returns:
+    Returns 0.
+
+shp2table(cursor, shpname, tablename)
+    Shapefile to database table.
+
+    Args:
+    cursor: existing psycopg2 cursor.
+    shpname: Path to input shapefile's folder, as string.
+    tablename: Name of target table, as string.
+
+    Returns:
+    Returns 0.
 
 
 ## Workflow
-### Case 1:  Clip raster file by user-defined coordinates, vectorize and create new Postgis database to save final shapefile.
 Libraries used:
 ```
 import os
@@ -23,14 +108,15 @@ import time
 from joblib import Parallel, delayed
 
 import sys
-sys.path.insert(1, '/fullpath_to_repository_directory/shp2postgis')
+sys.path.insert(1, '/fullpath_to_repo_dir/shp2postgis')
 from clipImageByCoordinates import GeoImClip
 from clipImageByCoordinates import quadrants_coords
-sys.path.insert(1, '/fullpath_to_repository_directory/SearchFileSystem')
+sys.path.insert(1, '/fullpath_to_repo_dir/SearchFileSystem')
 from vectorizer import vectorize
 from searchInFilesystem import treeSearch
 from pred2db import *
 ```
+### Case 1:  Clip raster file by user-defined coordinates, vectorize and create new Postgis database to save final shapefile.
 ```
 searchPath = '/fullpath_to_image_directory'
 raster_file = 'image_filename.tif'
@@ -38,11 +124,11 @@ raster_file = 'image_filename.tif'
 # Create object for the whole image & set image_path as cwd.
 wholeImageObject = GeoImClip(searchPath)
 
-# Coordinates of upper left & lower right corner.
-minx=25.6239
-maxx=25.9216
-miny=34.9867
-maxy=35.355
+# User defined coordinates of upper left & lower right corner.
+minx = 25.6239
+maxx = 25.9216
+miny = 34.9867
+maxy = 35.355
 
 # Create bounding box from given coordinates. Image's srid is required as input parameter.
 bbox = wholeImageObject.boundingBox(minx, maxx, miny, maxy, 4326)
