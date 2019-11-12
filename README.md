@@ -11,46 +11,55 @@ The functions pred2db allow you to create a new database, or connect to an exist
 
 ## Usage
 ### clipImageByCoordinates
+```
 minx, maxx, miny, maxy = quadrants_coords(raster_file, quadrant)
-    Clip selected quadrant of raster file.
+```
+Clip selected quadrant of raster file.
 
-    Args:
-    raster_file (string): Raster image file fullpath.
-    quadrant: One of the four pieces. Start counting from upper left corner, clockwise.
-              Integer in range [1,4].
+Args:
+raster_file (string): Raster image file fullpath.
+quadrant: One of the four pieces. Start counting from upper left corner, clockwise.
+            Integer in range [1,4].
 
-    Returns:
-    Bounding box coordinates of selected quadrant.
+Returns:
+Bounding box coordinates of selected quadrant.
 
-
+```
 wholeImageObject = GeoImClip(searchPath)
+```
     Returns class object.
 
+```
 geometry = wholeImageObject.boundingBox(minx, maxx, miny, maxy, srid)
-        Generates polygon geometry, from given coordinates.
+```
+    Generates polygon geometry, from given coordinates.
 
-        Args:
-        minx, maxx, miny, maxy : float number.
-        srid (integer): coordinates reference system id.
+    Args:
+    minx, maxx, miny, maxy : float number.
+    srid (integer): coordinates reference system id.
 
-        Returns:
-        geometry: polygon geometry dataframe.
+    Returns:
+    geometry: polygon geometry dataframe.
 
+```
 out_img, out_meta = wholeImageObject.clip(im, geometry, write=False)
-        Clip image & update metadata of output image. Option to write
-        output image to disk.
+```
+    Clip image & update metadata of output image. Option to write
+    output image to disk.
 
-        Args:
-        im (string): Path to image.
-        geometry: Geometry dataframe used as bounding box to clip image.
-        write (bool (opt)): Whether to save output raster to disk. Defaults to False. 
+    Args:
+    im (string): Path to image.
+    geometry: Geometry dataframe used as bounding box to clip image.
+    write (bool (opt)): Whether to save output raster to disk. Defaults to False. 
 
-        Returns:
-        out_img: clipped array.
-        out_meta: updated metadata for clipped raster.
+    Returns:
+    out_img: clipped array.
+    out_meta: updated metadata for clipped raster.
 
 ### vectorizer
+```
 vectorize(raster_file=out_img, metadata=out_meta, vector_file, driver, mask_value)
+```
     Extract vector from raster. Vector propably will include polygons with holes.
     
     Args:
@@ -64,7 +73,9 @@ vectorize(raster_file=out_img, metadata=out_meta, vector_file, driver, mask_valu
     Returns 0 & saves folder containing vector shapefile to cwd or to given path.
 
 ### pred2db
+```
 createsdb(host, dbname, user, password)
+```
     Create new postgres database.
 
     Args:
@@ -76,7 +87,9 @@ createsdb(host, dbname, user, password)
     Returns:
     Returns 0.
 
+```
 creategeotable(cursor, tablename)
+```
     Create new table & postgis extension.
 
     Args:
@@ -86,7 +99,9 @@ creategeotable(cursor, tablename)
     Returns:
     Returns 0.
 
+```
 shp2table(cursor, shpname, tablename)
+```
     Shapefile to database table.
 
     Args:
