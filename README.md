@@ -10,8 +10,8 @@ The functions pred2db allow you to create a new database, or connect to an exist
 
 
 ## Running the tests
-# Libs used
-'''
+### Libs used
+```
 import os
 import rasterio
 from osgeo import ogr
@@ -19,4 +19,4 @@ import time
 from joblib import Parallel, delayed
 import sys
 from clipImageByCoordinates import *
-'''
+```
