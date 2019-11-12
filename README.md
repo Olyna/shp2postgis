@@ -107,7 +107,7 @@ Returns 0.
 
 
 ## Workflow
-Libraries used:
+Required libraries:
 ```
 import os
 import rasterio
