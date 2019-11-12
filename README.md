@@ -102,20 +102,17 @@ minx, maxx, miny, maxy = quadrants_coords(os.path.join(searchPath, raster_file),
 bbox = wholeImageObject.boundingBox(minx, maxx, miny, maxy, 32634)
 image2, metadata2 = wholeImageObject.clip(raster_file, bbox)
 
-
 # Quadrant_3
 wholeImageObject = GeoImClip(searchPath)
 minx, maxx, miny, maxy = quadrants_coords(os.path.join(searchPath, raster_file), 3)
 bbox = wholeImageObject.boundingBox(minx, maxx, miny, maxy, 32634)
 image3, metadata3 = wholeImageObject.clip(raster_file, bbox)
 
-
 # Quadrant_4
 wholeImageObject = GeoImClip(searchPath)
 minx, maxx, miny, maxy = quadrants_coords(os.path.join(searchPath, raster_file), 4)
 bbox = wholeImageObject.boundingBox(minx, maxx, miny, maxy, 32634)
 image4, metadata4 = wholeImageObject.clip(raster_file, bbox)
-
 
 # Parallelize vectorization of quadrants.
 # List of arrays to vectorize.
