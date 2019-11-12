@@ -8,8 +8,32 @@ Module clipImageByCoordinates creates an object, which consists only of the full
 
 The functions pred2db allow you to create a new database, or connect to an existing database in order to create a new table and import data, or import data into an existing table.
 
-
 ## Workflow
+### Case 1:  Clip raster file by user-defined coordinates, vectorize and create new Postgis database to save final shapefile.
+```
+import os
+import rasterio
+from osgeo import ogr
+import time
+from joblib import Parallel, delayed
+
+import sys
+sys.path.insert(1, '/fullpath_to_repository_directory/shp2postgis')
+from clipImageByCoordinates import GeoImClip
+from clipImageByCoordinates import quadrants_coords
+sys.path.insert(1, '/fullpath_to_repository_directory/SearchFileSystem')
+from vectorizer import vectorize
+from searchInFilesystem import treeSearch
+from pred2db import *
+
+
+searchPath = '/fullpath_to_image_directory'
+raster_file = 'image_filename.tif'
+
+# Create object for the whole image & set image_path as cwd.
+wholeImageObject = GeoImClip(searchPath)
+```
+### Case 2: Clip big raster file in quadrants, parallelize vectorization and save final shapefiles to existing Postgis database.
 
 
 ## Usage
