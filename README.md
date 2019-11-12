@@ -11,30 +11,34 @@ The functions pred2db allow you to create a new database, or connect to an exist
 
 ## Usage
 ### clipImageByCoordinates
+
 ```
 minx, maxx, miny, maxy = quadrants_coords(raster_file, quadrant)
 ```
+
 Clip selected quadrant of raster file.
-Args: \n
-raster_file (string): Raster image file fullpath. \n
-quadrant: One of the four pieces. Start counting from upper left corner, clockwise. Integer in range [1,4]. \n
-Returns: \n
+Args: \
+raster_file (string): Raster image file fullpath. \
+quadrant: One of the four pieces. Start counting from upper left corner, clockwise. Integer in range [1,4]. \
+Returns: \
 Bounding box coordinates of selected quadrant.
+
 
 ```
 wholeImageObject = GeoImClip(searchPath)
 ```
+
 Returns class object.
+
 
 ```
 geometry = wholeImageObject.boundingBox(minx, maxx, miny, maxy, srid)
 ```
-Generates polygon geometry, from given coordinates.
 
+Generates polygon geometry, from given coordinates.
 Args:
 minx, maxx, miny, maxy : float number.
 srid (integer): coordinates reference system id.
-
 Returns:
 geometry: polygon geometry dataframe.
 
