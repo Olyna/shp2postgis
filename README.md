@@ -9,14 +9,7 @@ Module clipImageByCoordinates creates an object, which consists only of the full
 The functions pred2db allow you to create a new database, or connect to an existing database in order to create a new table and import data, or import data into an existing table.
 
 
-## Running the tests
-### Libs used
-```
-import os
-import rasterio
-from osgeo import ogr
-import time
-from joblib import Parallel, delayed
-import sys
-from clipImageByCoordinates import *
-```
+## Workflow
+
+
+## Usage
