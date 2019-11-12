@@ -14,6 +14,7 @@ The functions pred2db allow you to create a new database, or connect to an exist
 
 ## Workflow
 ### Case 1:  Clip raster file by user-defined coordinates, vectorize and create new Postgis database to save final shapefile.
+Libraries used:
 ```
 import os
 import rasterio
@@ -29,8 +30,8 @@ sys.path.insert(1, '/fullpath_to_repository_directory/SearchFileSystem')
 from vectorizer import vectorize
 from searchInFilesystem import treeSearch
 from pred2db import *
-
-
+```
+```
 searchPath = '/fullpath_to_image_directory'
 raster_file = 'image_filename.tif'
 
