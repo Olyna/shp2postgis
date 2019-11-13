@@ -125,6 +125,11 @@ from searchInFilesystem import treeSearch
 from pred2db import *
 ```
 ### Case 1:  Clip raster file by user-defined coordinates, vectorize and create new Postgis database to save final shapefile.
+
+
+![](/home/olyna/Documents/msc_thesis/rast2vect/2005_predicted.TIF)
+
+
 ```
 searchPath = '/fullpath_to_image_directory'
 raster_file = 'image_filename.tif'
