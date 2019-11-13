@@ -127,7 +127,7 @@ from pred2db import *
 ### Case 1:  Clip raster file by user-defined coordinates, vectorize and create new Postgis database to save final shapefile.
 
 
-![](/home/olyna/Documents/SCRIPTS/Python/Github/images/creta.jpg)
+![](creta.jpg)
 
 
 ```
