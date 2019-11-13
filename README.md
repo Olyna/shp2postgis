@@ -126,6 +126,8 @@ from pred2db import *
 ```
 ### Case 1:  Clip raster file by user-defined coordinates, vectorize and create new Postgis database to save final shapefile.
 
+![creta](https://user-images.githubusercontent.com/37594015/68794375-903c1700-0657-11ea-915f-7dcf66048a82.jpg)
+
 ```
 searchPath = '/fullpath_to_image_directory'
 raster_file = 'image_filename.tif'
