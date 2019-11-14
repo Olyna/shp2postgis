@@ -231,7 +231,9 @@ Parallel(n_jobs=2, verbose=51)(delayed(vectorize)(
 end = time.time()
 print("TOTAL elapsed time:. . . {} mins".format((end-start)//60))
 
+
 ![final](https://user-images.githubusercontent.com/37594015/68871411-0d719580-0705-11ea-9af9-1c2e87ddd599.jpg)
+
 
 # Database credentials.
 host = 'host'
