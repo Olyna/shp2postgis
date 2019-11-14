@@ -79,7 +79,7 @@ def shp2table(cursor, shpname, tablename):
     srcFile = str(shpname)
     shapefile = osgeo.ogr.Open(srcFile)    
     layer = shapefile.GetLayer(0)
-    print("Insert shapefile:...{}\nto database:...{}".format(shpname, tablename))
+    print("Insert shapefile:...{}\nin database:...{}".format(shpname, tablename))
     print("Features in this shapefile:...{}".format(layer.GetFeatureCount()))
     for i in range(layer.GetFeatureCount()):
         feature = layer.GetFeature(i)  
