@@ -125,9 +125,6 @@ from searchInFilesystem import treeSearch
 from pred2db import *
 ```
 ### Case 1:  Clip raster file by user-defined coordinates, vectorize and create new Postgis database to save final shapefile.
-
-![creta](https://user-images.githubusercontent.com/37594015/68794375-903c1700-0657-11ea-915f-7dcf66048a82.jpg)
-
 ```
 searchPath = '/fullpath_to_image_directory'
 raster_file = 'image_filename.tif'
@@ -136,10 +133,10 @@ raster_file = 'image_filename.tif'
 wholeImageObject = GeoImClip(searchPath)
 
 # User defined coordinates of upper left & lower right corner.
-minx = 25.6239
-maxx = 25.9216
-miny = 34.9867
-maxy = 35.355
+minx = 25.66
+maxx = 25.80
+miny = 35.12
+maxy = 35.32
 
 # Create bounding box from given coordinates. Image's srid is required as input parameter.
 bbox = wholeImageObject.boundingBox(minx, maxx, miny, maxy, 4326)
@@ -158,7 +155,7 @@ user = 'username'
 password = 'password'
 
 # Create new database.
-createsdb('host', 'new_database_name', 'username', 'password')
+createsdb(host, dbname, user, password)
 
 # Connect to new database.
 con = ps.connect(host=host, dbname=dbname, user=user, password=password)
@@ -170,7 +167,7 @@ cur = con.cursor()
 creategeotable(cur, 'new_table_name')
 
 # Insert data from shp to database.
-shp2table(cur, 'shp_path', 'new_table_name')
+shp2table(cur, 'shp_name', 'new_table_name')
 
 # Close connection with database.
 cur.close()
@@ -234,6 +231,7 @@ Parallel(n_jobs=2, verbose=51)(delayed(vectorize)(
 end = time.time()
 print("TOTAL elapsed time:. . . {} mins".format((end-start)//60))
 
+![final](https://user-images.githubusercontent.com/37594015/68871411-0d719580-0705-11ea-9af9-1c2e87ddd599.jpg)
 
 # Database credentials.
 host = 'host'

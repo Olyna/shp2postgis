@@ -89,23 +89,23 @@ def shp2table(cursor, shpname, tablename):
                     ({}, ST_GeometryFromText('{}', 4326))".format(dn, wkt))
 
         if i == int(layer.GetFeatureCount() * 0.9):
-            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+            print("Proccess:...{}%".format(round(i*100/layer.GetFeatureCount(), 2)))
         elif i == int(layer.GetFeatureCount() * 0.8):
-            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+            print("Proccess:...{}%".format(round(i*100/layer.GetFeatureCount(), 2)))
         elif i == int(layer.GetFeatureCount() * 0.7):
-            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+            print("Proccess:...{}%".format(round(i*100/layer.GetFeatureCount(), 2)))
         elif i == int(layer.GetFeatureCount() * 0.6):
-            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+            print("Proccess:...{}%".format(round(i*100/layer.GetFeatureCount(), 2)))
         elif i == int(layer.GetFeatureCount() * 0.5):
-            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+            print("Proccess:...{}%".format(round(i*100/layer.GetFeatureCount(), 2)))
         elif i == int(layer.GetFeatureCount() * 0.4):
-            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+            print("Proccess:...{}%".format(round(i*100/layer.GetFeatureCount(), 2)))
         elif i == int(layer.GetFeatureCount() * 0.3):
-            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+            print("Proccess:...{}%".format(round(i*100/layer.GetFeatureCount(), 2)))
         elif i == int(layer.GetFeatureCount() * 0.2):
-            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+            print("Proccess:...{}%".format(round(i*100/layer.GetFeatureCount(), 2)))
         elif i == int(layer.GetFeatureCount() * 0.1):
-            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+            print("Proccess:...{}%".format(round(i*100/layer.GetFeatureCount(), 2)))
         else:
             pass
     return 0
