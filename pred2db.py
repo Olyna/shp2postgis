@@ -79,12 +79,33 @@ def shp2table(cursor, shpname, tablename):
     srcFile = str(shpname)
     shapefile = osgeo.ogr.Open(srcFile)    
     layer = shapefile.GetLayer(0)
-    print("Insert shapefile. . .{}\nto database. . .{}".format(shpname, tablename))
-    print("Features in this shapefile:. . .{}".format(layer.GetFeatureCount()))
-    for i in range(layer.GetFeatureCount()):  
+    print("Insert shapefile:...{}\nto database:...{}".format(shpname, tablename))
+    print("Features in this shapefile:...{}".format(layer.GetFeatureCount()))
+    for i in range(layer.GetFeatureCount()):
         feature = layer.GetFeature(i)  
         dn = feature.GetField("raster_val")
         wkt = feature.GetGeometryRef().ExportToWkt()  
         cursor.execute("INSERT INTO "+str(tablename)+"(raster_val, geom) VALUES\
                     ({}, ST_GeometryFromText('{}', 4326))".format(dn, wkt))
+
+        if i == int(layer.GetFeatureCount() * 0.9):
+            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+        elif i == int(layer.GetFeatureCount() * 0.8):
+            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+        elif i == int(layer.GetFeatureCount() * 0.7):
+            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+        elif i == int(layer.GetFeatureCount() * 0.6):
+            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+        elif i == int(layer.GetFeatureCount() * 0.5):
+            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+        elif i == int(layer.GetFeatureCount() * 0.4):
+            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+        elif i == int(layer.GetFeatureCount() * 0.3):
+            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+        elif i == int(layer.GetFeatureCount() * 0.2):
+            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+        elif i == int(layer.GetFeatureCount() * 0.1):
+            print("Proccess:...{}".format(round(i*100/layer.GetFeatureCount(), 2)))
+        else:
+            pass
     return 0
