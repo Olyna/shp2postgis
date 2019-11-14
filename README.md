@@ -125,6 +125,7 @@ from searchInFilesystem import treeSearch
 from pred2db import *
 ```
 ### Case 1:  Clip raster file by user-defined coordinates, vectorize and create new Postgis database to save final shapefile.
+![creta_fin](https://user-images.githubusercontent.com/37594015/68877689-21ba9000-070f-11ea-9b46-ba19cc5b0d35.jpg)
 ```
 searchPath = '/fullpath_to_image_directory'
 raster_file = 'image_filename.tif'
@@ -230,11 +231,10 @@ Parallel(n_jobs=2, verbose=51)(delayed(vectorize)(
 
 end = time.time()
 print("TOTAL elapsed time:. . . {} mins".format((end-start)//60))
+```
+![sterea_fin](https://user-images.githubusercontent.com/37594015/68877619-08194880-070f-11ea-8476-a4aab3075c3b.jpg)
 
-
-![final](https://user-images.githubusercontent.com/37594015/68871411-0d719580-0705-11ea-9af9-1c2e87ddd599.jpg)
-
-
+```
 # Database credentials.
 host = 'host'
 dbname = 'new_database_name'
