@@ -15,6 +15,7 @@ from fiona.crs import from_epsg
 import os
 import json
 import numpy as np
+import cv2
 
 
 def quadrants_coords(raster_file, quadrant):
@@ -107,7 +108,7 @@ class GeoImClip:
         return [json.loads(gdf.to_json())['features'][0]['geometry']]
     
     
-    def clip(self, im, geometry, write=False):
+    def clip(self, im, geometry, resize=False, write=False):
         """Clip image & update metadata of output image. Option to write
         output image to disk.
 
@@ -139,9 +140,29 @@ class GeoImClip:
                      "transform": out_transform,
                      "crs": data.crs.data})
 
+        if resize == True:
+
+            # Find top-left x, y coordinates of new, cropped image.
+            new_left_top_coords = (list(out_meta['transform'])[2], list(out_meta['transform'])[5])
+            # Assume that pixel is cubic.
+            pixelSize = list(out_meta['transform'])[0]
+            # Create the new transformation.
+            transf = rasterio.transform.from_origin(
+                new_left_top_coords[0], new_left_top_coords[1], pixelSize//2, pixelSize//2)
+
+            # Update metadata for output image
+            out_meta.update({"height": out_img.shape[1]*2,
+                        "width": out_img.shape[2]*2,
+                        "transform": transf})
+            # Upsample.
+            out_img = cv2.resize(
+                out_img[0, :, :], (2*out_img.shape[1], 2*out_img.shape[2]), interpolation=cv2.INTER_NEAREST)
+            # Reshape as rasterio needs the shape.
+            out_img = out_img.reshape(1, out_img.shape[0], out_img.shape[1])
+
         if write == True:
-            # New name for output image
-            out_tif = im.split('.')[0] + '_clipped.TIF'
+            # New name for output image. Split on second occurence of dot.
+            out_tif = im.split('.')[0]+ '.'+ im.split('.')[1] + '10m_clipped.tif'
             # Write output image to disk
             with rasterio.open(out_tif, "w", **out_meta) as dest:
                 dest.write(out_img)
