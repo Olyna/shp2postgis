@@ -132,13 +132,13 @@ class GeoImClip:
         out_img, out_transform = mask(dataset=data, shapes=coords, crop=True)
         # Copy original metadata
         out_meta = data.meta.copy()
-        #print(out_meta)
+
         # Update metadata for output image
         out_meta.update({"driver": "GTiff",
-                     "height": out_img.shape[1],
-                     "width": out_img.shape[2],
-                     "transform": out_transform,
-                     "crs": data.crs.data})
+                    "height": out_img.shape[1],
+                    "width": out_img.shape[2],
+                    "transform": out_transform,
+                    "crs": data.crs.data})
 
         if resize == True:
 
