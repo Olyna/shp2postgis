@@ -4,16 +4,16 @@
 Created on Tue Jul 30 16:10:36 2019
 
 @author: Gounari Olympia
+UNDER CONSTRUCTION
 """
 
 import rasterio
 from rasterio.plot import show
-from rasterio.mask import mask
+from rasterio.windows import Window
 from shapely.geometry import box
 import geopandas as gpd
 from fiona.crs import from_epsg
 import os
-import json
 import numpy as np
 import cv2
 
@@ -28,10 +28,10 @@ def quadrants_coords(raster_file, quadrant):
 
     Returns:
     Bounding box coordinates of selected quadrant.
-    minx = left = west
-    maxx = right = east
-    miny = bottom = south
-    maxy = top = north
+            minx = left = west
+            maxx = right = east
+            miny = bottom = south
+            maxy = top = north
     """
     with rasterio.open(raster_file) as src:
 
@@ -66,6 +66,7 @@ def quadrants_coords(raster_file, quadrant):
 
 
 
+
 class GeoImClip:
     def __init__(self, searchPath):
         # Path to where the searching will begin.
@@ -78,6 +79,7 @@ class GeoImClip:
         
     def boundingBox(self, minx, maxx, miny, maxy, srid):
         """Generates polygon geometry, from given coordinates.
+        Given coordinates must be in the same CRS, as image's CRS.
 
         Args:
         minx, maxx, miny, maxy : float number.
@@ -85,10 +87,10 @@ class GeoImClip:
 
         Returns:
         geometry: polygon geometry dataframe.
-        minx = left = west
-        maxx = right = east
-        miny = bottom = south
-        maxy = top = north
+                    minx = left = west
+                    maxx = right = east
+                    miny = bottom = south
+                    maxy = top = north
         """
         # Create bounding box
         bbox = box(minx, miny, maxx, maxy)
@@ -96,83 +98,76 @@ class GeoImClip:
         geometry = gpd.GeoDataFrame({'geometry': bbox},
                                     index=[0], crs=from_epsg(srid))
         return geometry
-        
 
-    def getFeatures(self, gdf):
-        """Parse features from GeoDataFrame in such a manner that
-        rasterio wants them. Called from function clip().
 
-        Args:
-        gdf: geometry dataframe.
-        """
-        return [json.loads(gdf.to_json())['features'][0]['geometry']]
-    
-    
-    def clip(self, im, geometry, resize=False, write=False):
+    def clip(self, im, geometry, newname, resize=False, write=False):
         """Clip image & update metadata of output image. Option to write
         output image to disk.
 
         Args:
         im (string): Path to image.
-        geometry: Geometry dataframe used as bounding box to clip image.
+        geometry (geoDataframe): Geometry dataframe used as bounding box to clip image.
         write (bool (opt)): Whether to save output raster to disk. Defaults to False. 
 
         Returns:
-        out_img: clipped array.
-        out_meta: updated metadata for clipped raster.
+        out_img (array): clipped array.
+        out_meta (dictionary): updated metadata for clipped raster.
         """
-        # Read image without load it on disk (dataset object)
-        data = rasterio.open(im, nodata=0)
-        # Convert geometry to image's Coord. Ref. Syst.
-        geom = geometry.to_crs(crs=data.crs.data)
-        # Plot original image
-        #show((data, 1), cmap='terrain')
-        coords = self.getFeatures(geom)
-        # Clip image. Keep output array and transformation to update metadata
-        out_img, out_transform = mask(dataset=data, shapes=coords, crop=True)
-        # Copy original metadata
-        out_meta = data.meta.copy()
+        with rasterio.open(im) as src:
+            # Image metadata.
+            metadata = src.meta
 
-        # Update metadata for output image
-        out_meta.update({"driver": "GTiff",
-                    "height": out_img.shape[1],
-                    "width": out_img.shape[2],
-                    "transform": out_transform,
-                    "crs": data.crs.data})
+            # # It doesn't work well. It changes orinal minx & maxy.
+            # # Convert window's CRS to image's CRS.
+            # geom = geometry.to_crs(crs=metadata['crs'])
 
-        if resize == True:
+            # Convert x,y to row, col.
+            row_start, col_start = src.index(geometry.bounds['minx'][0], geometry.bounds['maxy'][0])
+            row_stop, col_stop = src.index(geometry.bounds['maxx'][0], geometry.bounds['miny'][0])
 
-            # Find top-left x, y coordinates of new, cropped image.
-            new_left_top_coords = (list(out_meta['transform'])[2], list(out_meta['transform'])[5])
-            # Assume that pixel is cubic.
-            pixelSize = list(out_meta['transform'])[0]
+            # Parse pixel size from metadata.
+            pixelSize = list(metadata['transform'])[0]
+
             # Create the new transformation.
             transf = rasterio.transform.from_origin(
-                new_left_top_coords[0], new_left_top_coords[1], pixelSize//2, pixelSize//2)
+                geometry.bounds['minx'][0], geometry.bounds['maxy'][0], pixelSize, pixelSize)
+
+            # Update metadata.
+            metadata.update(
+                driver='GTiff', transform=transf,
+                height=(row_stop-row_start), width=(col_stop-col_start))
+
+            # Construct a window by image coordinates.
+            win = Window.from_slices(slice(row_start, row_stop), slice(col_start, col_stop))
+
+            # Clip image.
+            out_img = src.read(1, window=win)
+
+        if resize == True:
+            # Create the new transformation.
+            transf = rasterio.transform.from_origin(
+                geometry.bounds['minx'][0], geometry.bounds['maxy'][0], pixelSize//2, pixelSize//2)
 
             # Update metadata for output image
-            out_meta.update({"height": out_img.shape[1]*2,
-                        "width": out_img.shape[2]*2,
+            metadata.update({"height": out_img.shape[0]*2,
+                        "width": out_img.shape[1]*2,
                         "transform": transf})
             # Upsample.
             out_img = cv2.resize(
-                out_img[0, :, :], (2*out_img.shape[1], 2*out_img.shape[2]), interpolation=cv2.INTER_NEAREST)
-            # Reshape as rasterio needs the shape.
-            out_img = out_img.reshape(1, out_img.shape[0], out_img.shape[1])
+                out_img, (2*out_img.shape[0], 2*out_img.shape[1]), interpolation=cv2.INTER_LINEAR)
 
         if write == True:
+            # Reshape as rasterio needs the shape.
+            temp = out_img.reshape(1, out_img.shape[0], out_img.shape[1])
             # New name for output image. Split on second occurence of dot.
-            out_tif = im.split('.')[0]+ '.'+ im.split('.')[1] + '10m_clipped.tif'
+            out_tif = im.split('.')[0]+ '.'+ im.split('.')[1] + str(newname) + '.tif'
             # Write output image to disk
-            with rasterio.open(out_tif, "w", **out_meta) as dest:
-                dest.write(out_img)
+            with rasterio.open(out_tif, "w", **metadata) as dest:
+                dest.write(temp)
 
             """
             # Plot output image
             clipped = rasterio.open(out_tif)
             #show((clipped, 1), cmap='terrain')
             """
-        else:
-            pass
-
-        return out_img, out_meta
+        return out_img, metadata
