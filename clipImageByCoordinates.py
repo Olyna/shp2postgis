@@ -100,19 +100,26 @@ class GeoImClip:
         return geometry
 
 
-    def clip(self, im, geometry, newname, resize=False, write=False):
+    def clip(self, im, geometry, newname, resize=False, write=True):
         """Clip image & update metadata of output image. Option to write
         output image to disk.
 
         Args:
         im (string): Path to image.
         geometry (geoDataframe): Geometry dataframe used as bounding box to clip image.
-        write (bool (opt)): Whether to save output raster to disk. Defaults to False. 
+        write (bool (opt)): Whether to save output raster to disk. Defaults to True. 
 
         Returns:
         out_img (array): clipped array.
         out_meta (dictionary): updated metadata for clipped raster.
         """
+        # New name for output image. Split on second occurence of dot.
+        out_tif = im.split('.')[0]+ '.'+ im.split('.')[1] + str(newname) + '.tif'
+
+        if os.path.exists(out_tif) == True and os.stat(out_tif).st_size != 0:
+            # Pass if file already exists & it's size is not zero.
+            return
+
         with rasterio.open(im) as src:
             # Image metadata.
             metadata = src.meta
@@ -159,8 +166,6 @@ class GeoImClip:
         if write == True:
             # Reshape as rasterio needs the shape.
             temp = out_img.reshape(1, out_img.shape[0], out_img.shape[1])
-            # New name for output image. Split on second occurence of dot.
-            out_tif = im.split('.')[0]+ '.'+ im.split('.')[1] + str(newname) + '.tif'
             # Write output image to disk
             with rasterio.open(out_tif, "w", **metadata) as dest:
                 dest.write(temp)
