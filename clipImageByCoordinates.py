@@ -3,7 +3,6 @@
 """
 Created on Tue Jul 30 16:10:36 2019
 
-@author: Gounari Olympia
 UNDER CONSTRUCTION
 """
 

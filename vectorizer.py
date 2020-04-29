@@ -1,13 +1,8 @@
-"""
-!/usr/bin/env python3
- -*- coding: utf-8 -*-
-Created on Mon Oct  7 18:16:12 2019
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-@author: olyna
-"""
-import fiona
-from rasterio.features import shapes
-import time
+
+
 
 def vectorize(raster_file, metadata, vector_file, driver, mask_value=None):
     """Extract vector from raster. Vector propably will include polygons with holes.
@@ -22,7 +17,11 @@ def vectorize(raster_file, metadata, vector_file, driver, mask_value=None):
     Returns:
     Returns None & saves folder containing vector shapefile to cwd or to given path.
     """
-    start = time.time()
+    import fiona
+    from rasterio.features import shapes
+    import datetime as dt
+
+    start = dt.datetime.now()
 
     if mask_value is not None:
         mask = raster_file == mask_value
@@ -31,7 +30,7 @@ def vectorize(raster_file, metadata, vector_file, driver, mask_value=None):
     
     print("Extract id, shapes & values...")
     features = ({'properties': {'raster_val': v}, 'geometry': s} for i, (s, v) in enumerate(
-            # The shapes iterator yields geometry, value pairs
+            # The shapes iterator yields geometry, value pairs.
             shapes(raster_file, mask=mask, connectivity=4, transform=metadata['transform'])))
 
     print("Save to disk...")
@@ -43,6 +42,7 @@ def vectorize(raster_file, metadata, vector_file, driver, mask_value=None):
                 schema = {'properties': [('raster_val', 'int')], 'geometry': 'Polygon'}) as dst:
             dst.writerecords(features)
 
-    end = time.time()
-    print("Elapsed time to vectorize raster to shp {}:\n{} mins".format(vector_file, (end-start)//60))
+    end = dt.datetime.now()
+    print("Elapsed time to vectorize raster to shp {}:\n{} mins".format(
+        vector_file, (int((end-start).seconds/60)))
     return None

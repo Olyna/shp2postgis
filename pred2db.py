@@ -1,10 +1,6 @@
-"""
-!/usr/bin/env python3
- -*- coding: utf-8 -*-
-Created on Mon Oct  7 18:16:12 2019
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-@author: olyna
-"""
 import os
 import psycopg2 as ps
 import osgeo.ogr
