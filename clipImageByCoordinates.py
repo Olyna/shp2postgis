@@ -15,6 +15,16 @@ from fiona.crs import from_epsg
 import os
 import numpy as np
 import cv2
+import logging
+
+
+logger = logging.getLogger(__name__)
+# Override the default severity of logging.
+logger.setLevel('INFO')
+# Use StreamHandler to log to the console.
+stream_handler = logging.StreamHandler()
+# Don't forget to add the handler.
+logger.addHandler(stream_handler)
 
 
 def quadrants_coords(raster_file, quadrant):
@@ -22,11 +32,11 @@ def quadrants_coords(raster_file, quadrant):
 
     Args:
     raster_file (string): Raster image file fullpath.
-    quadrant: One of the four pieces. Start counting from upper left corner, clockwise.
+    quadrant (integer): One of the four pieces. Start counting from upper left corner, clockwise.
               Integer in range [1,4].
 
     Returns:
-    Bounding box coordinates of selected quadrant.
+    Bounding box coordinates of selected quadrant (minx, maxx, miny, maxy).
             minx = left = west
             maxx = right = east
             miny = bottom = south
@@ -59,7 +69,7 @@ def quadrants_coords(raster_file, quadrant):
             miny = src.bounds.bottom # lower middle point
 
         else:
-            print('Quadrant must be integer in range [1,4].')
+            logger.error('Quadrant must be integer in range [1,4].')
 
     return(minx, maxx, miny, maxy)
 
@@ -73,7 +83,7 @@ class GeoImClip:
         
         # Change current working directory to given search-path.
         os.chdir(self.searchPath)
-        print('Searching sub-directories in path "{}"\n'.format(self.searchPath))
+        logger.debug('Searching sub-directories in path "{}"\n'.format(self.searchPath))
         
         
     def boundingBox(self, minx, maxx, miny, maxy, srid):
@@ -106,6 +116,7 @@ class GeoImClip:
         Args:
         im (string): Path to image.
         geometry (geoDataframe): Geometry dataframe used as bounding box to clip image.
+        newname (string): Piece of string added to the end of the new filename.
         write (bool (opt)): Whether to save output raster to disk. Defaults to True. 
 
         Returns:
